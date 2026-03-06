@@ -25,6 +25,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+gspread = ["gspread>=5.0"]
 dev = ["pytest", "ruff"]
 
 [project.scripts]
