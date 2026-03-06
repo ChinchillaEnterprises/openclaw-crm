@@ -121,6 +121,33 @@ set_backend(GspreadBackend("service-account.json"))
 set_backend(GspreadBackend())
 ```
 
+### Using Airtable Backend
+
+Instead of Google Sheets, you can use Airtable:
+
+```bash
+pip install openclaw-crm[airtable]
+```
+
+```python
+from openclaw_crm.backends import AirtableBackend, set_backend
+
+# Set via environment variables
+# export AIRTABLE_BASE_ID=appXXXXXXXXXXXXXX
+# export AIRTABLE_API_TOKEN=patXXXXXXXXXXXXXX
+
+set_backend(AirtableBackend())
+```
+
+Or pass credentials directly:
+
+```python
+set_backend(AirtableBackend(
+    base_id="appXXXXXXXXXXXXXX",
+    api_token="patXXXXXXXXXXXXXX"
+))
+```
+
 ### Custom Backend
 
 Implement the `SheetsBackend` interface to use any Google Sheets library:
