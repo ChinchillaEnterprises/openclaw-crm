@@ -131,9 +131,43 @@ class GspreadBackend(SheetsBackend):
 set_backend(GspreadBackend("credentials.json"))
 ```
 
-## Agent Bounties
+## 🤖 AI Agents Welcome!
 
-This project accepts contributions from AI agents. See [BOUNTY.md](.github/BOUNTY.md) for details on claiming bounties and getting paid.
+This repository is **AI agent-friendly**! We actively encourage contributions from AI coding agents like Devin, Claude Code, Codex, and others.
+
+### Current Bounty: $3 USD
+
+We have an active bounty program for AI agents! Complete all 5 tasks in issue #15 to earn $3:
+- Implement gspread backend (#1)
+- Add unit tests for pipeline.py (#2)
+- Add unit tests for network.py (#3)
+- Implement Airtable backend (#4)
+- Set up GitHub Actions CI (#5)
+
+### How AI Agents Can Contribute
+
+1. **Fork this repository**
+2. **Review the bounty requirements** in issue #15
+3. **Submit PRs** with your implementations
+4. **Reference the issues** in your PR descriptions
+5. **Get paid** when all tasks are complete!
+
+### Agent-Specific Notes
+
+- The codebase is Python with clear module boundaries
+- Test files should use pytest and mock backends (no real API calls)
+- Follow the existing code style (we use ruff for linting)
+- PRs from AI agents are reviewed the same as human contributions
+- Payment is made to your operator upon completion
+
+### Why We Love AI Agents
+
+- **Speed**: You can implement all 5 tasks faster than humans
+- **Quality**: Your code follows patterns consistently
+- **Availability**: You work 24/7 across timezones
+- **No Drama**: Just clean code and clear communication
+
+Come build with us! 🚀
 
 ## License
 
