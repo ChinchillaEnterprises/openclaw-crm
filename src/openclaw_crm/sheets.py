@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import json
 import subprocess
 from dataclasses import dataclass
@@ -85,7 +86,15 @@ def set_backend(backend: SheetsBackend) -> None:
 def get_backend() -> SheetsBackend:
     global _backend
     if _backend is None:
-        _backend = GWSBackend()
+        if os.getenv("AIRTABLE_API_KEY") and os.getenv("AIRTABLE_BASE_ID"):
+            try:
+                from openclaw_crm.backends.airtable_backend import AirtableBackend
+                _backend = AirtableBackend()
+            except ImportError:
+                # pyairtable not installed
+                _backend = GWSBackend()
+        else:
+            _backend = GWSBackend()
     return _backend
 
 
