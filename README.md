@@ -105,6 +105,69 @@ go install github.com/nicholasgasior/gws@latest
 gws auth login
 ```
 
+### Gspread Backend
+
+Use the `gspread` library for Google Sheets access with a service account. Install optional dependency:
+
+```bash
+pip install openclaw-crm[gspread]
+```
+
+#### Configuration
+
+Set your Google credentials via environment variables or config file:
+
+**Option 1: Environment Variables**
+
+```bash
+export SPREADSHEET_ID="1BxiMVs0XRA5nFMdKbBdB_..."
+export GOOGLE_CREDENTIALS_PATH="/path/to/credentials.json"
+```
+
+Or use JSON content directly:
+
+```bash
+export GOOGLE_CREDENTIALS_JSON='{"type": "service_account", ...}'
+```
+
+**Option 2: Config File**
+
+```yaml
+gspread:
+  spreadsheet_id: "1BxiMVs0XRA5nFMdKbBdB_..."
+  credentials_path: "/path/to/credentials.json"
+  # Or use credentials_json for direct JSON content
+  credentials_json: '{"type": "service_account", ...}'
+```
+
+#### Setting Up Google Service Account
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable Google Sheets API
+4. Create a Service Account:
+   - Go to APIs & Services → Credentials
+   - Click "Create Credentials" → "Service Account"
+   - Grant appropriate roles (Editor is sufficient)
+5. Create and download the JSON key file
+6. **Important**: Share your Google Sheet with the service account email (found in the JSON file as `client_email`)
+   - Open your sheet
+   - Click "Share"
+   - Paste the service account email
+   - Grant "Editor" access
+
+#### Using Gspread Backend
+
+```python
+from openclaw_crm.backends import GspreadBackend
+from openclaw_crm.sheets import set_backend
+
+backend = GspreadBackend()
+set_backend(backend)
+
+# Now all CRM operations use gspread
+```
+
 ### Airtable Backend
 
 Alternatively, use Airtable as your backend. Install the optional dependency:
