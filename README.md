@@ -103,6 +103,58 @@ go install github.com/nicholasgasior/gws@latest
 gws auth login
 ```
 
+## Airtable Backend
+
+You can use Airtable as a backend instead of Google Sheets.
+
+### Setup
+
+1.  **Install pyairtable**:
+    ```bash
+    pip install "openclaw-crm[airtable]"
+    ```
+2.  **Configure Environment**:
+    Set the following environment variables:
+    ```bash
+    export AIRTABLE_API_KEY="your_api_key"
+    export AIRTABLE_BASE_ID="your_base_id"
+    ```
+3.  **Create Airtable Base**:
+    Create a base with two tables: `Pipeline` and `Revenue Log`.
+
+    **Table: Pipeline** (Fields matching these names are required):
+    - Client (Single line text)
+    - Contact (Single line text)
+    - Source (Single select: upwork, network, etc.)
+    - Stage (Single select: lead, qualifying, proposal, negotiation, won, lost)
+    - Budget (Currency/Number)
+    - Rate Type (Single select: fixed, hourly, retainer)
+    - Service (Single line text)
+    - First Contact (Date)
+    - Last Contact (Date)
+    - Next Action (Single line text)
+    - Due Date (Date)
+    - Notes (Long text)
+    - Slack Channel (Single line text)
+    - Proposal Link (URL)
+    - Owner (Single line text)
+    - Upwork URL (URL)
+    - Probability (Formula or Number)
+    - Referred By (Link to another record in Pipeline? Or just text. System uses text names currently.)
+    - Network Parent (Text)
+    - Network Notes (Long text)
+    - Signal Date (Date)
+
+    **Table: Revenue Log**:
+    - Date (Date)
+    - Client (Single line text)
+    - Amount (Currency)
+    - Description (Single line text)
+    - Status (Single select: sent, paid, etc.)
+    - Invoice Link (URL)
+
+The system automatically detects the `AIRTABLE_API_KEY` and switches to the Airtable backend.
+
 ### Custom Backend
 
 Implement the `SheetsBackend` interface to use any Google Sheets library:
