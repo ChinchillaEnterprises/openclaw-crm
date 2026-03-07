@@ -1,5 +1,7 @@
 # openclaw-crm
 
+[![CI](https://github.com/ChinchillaEnterprises/openclaw-crm/actions/workflows/ci.yml/badge.svg)](https://github.com/ChinchillaEnterprises/openclaw-crm/actions/workflows/ci.yml)
+
 Lightweight CRM pipeline tracker backed by Google Sheets. Built for small agencies and solo operators who want pipeline visibility without paying for Salesforce.
 
 ## Features
@@ -91,7 +93,9 @@ Create a Google Sheet with two tabs:
 
 All commands output JSON: `{"ok": true, "text": "formatted message", "data": {...}}`
 
-## Google Sheets Backend
+## Backends
+
+### Google Sheets Backend (Default)
 
 By default, openclaw-crm uses the [`gws` CLI](https://github.com/nicholasgasior/gws) for Google Sheets access. Install it and authenticate:
 
@@ -103,9 +107,118 @@ go install github.com/nicholasgasior/gws@latest
 gws auth login
 ```
 
+### Gspread Backend
+
+Use the `gspread` library for Google Sheets access with a service account. Install optional dependency:
+
+```bash
+pip install openclaw-crm[gspread]
+```
+
+#### Configuration
+
+Set your Google credentials via environment variables or config file:
+
+**Option 1: Environment Variables**
+
+```bash
+export SPREADSHEET_ID="1BxiMVs0XRA5nFMdKbBdB_..."
+export GOOGLE_CREDENTIALS_PATH="/path/to/credentials.json"
+```
+
+Or use JSON content directly:
+
+```bash
+export GOOGLE_CREDENTIALS_JSON='{"type": "service_account", ...}'
+```
+
+**Option 2: Config File**
+
+```yaml
+gspread:
+  spreadsheet_id: "1BxiMVs0XRA5nFMdKbBdB_..."
+  credentials_path: "/path/to/credentials.json"
+  # Or use credentials_json for direct JSON content
+  credentials_json: '{"type": "service_account", ...}'
+```
+
+#### Setting Up Google Service Account
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable Google Sheets API
+4. Create a Service Account:
+   - Go to APIs & Services → Credentials
+   - Click "Create Credentials" → "Service Account"
+   - Grant appropriate roles (Editor is sufficient)
+5. Create and download the JSON key file
+6. **Important**: Share your Google Sheet with the service account email (found in the JSON file as `client_email`)
+   - Open your sheet
+   - Click "Share"
+   - Paste the service account email
+   - Grant "Editor" access
+
+#### Using Gspread Backend
+
+```python
+from openclaw_crm.backends import GspreadBackend
+from openclaw_crm.sheets import set_backend
+
+backend = GspreadBackend()
+set_backend(backend)
+
+# Now all CRM operations use gspread
+```
+
+### Airtable Backend
+
+Alternatively, use Airtable as your backend. Install the optional dependency:
+
+```bash
+pip install openclaw-crm[airtable]
+```
+
+#### Configuration
+
+Set your Airtable credentials via environment variables or config file:
+
+**Option 1: Environment Variables**
+
+```bash
+export AIRTABLE_BASE_ID="appXXXXXXXXXXXXXX"
+export AIRTABLE_API_TOKEN="patXXXXXXXXXXXXXX"
+```
+
+**Option 2: Config File**
+
+```yaml
+airtable:
+  base_id: "appXXXXXXXXXXXXXX"
+  api_token: "patXXXXXXXXXXXXXX"
+```
+
+#### Getting Airtable Credentials
+
+1. Go to [Airtable API](https://airtable.com/create/tokens) and create a personal access token
+2. Grant access to your base (read & write permissions)
+3. Copy the base ID from the Airtable API documentation for your base
+4. Create tables matching the [Spreadsheet Setup](#spreadsheet-setup) structure
+
+#### Using Airtable Backend
+
+```python
+from openclaw_crm.backends.airtable_backend import AirtableBackend
+from openclaw_crm.sheets import set_backend
+
+backend = AirtableBackend()
+set_backend(backend)
+
+# Now all CRM operations use Airtable
+```
+
 ### Custom Backend
 
-Implement the `SheetsBackend` interface to use any Google Sheets library:
+Implement the `SheetsBackend` interface to use any data source:
 
 ```python
 from openclaw_crm.sheets import SheetsBackend, SheetResult, set_backend
