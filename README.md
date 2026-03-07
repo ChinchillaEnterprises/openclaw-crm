@@ -1,3 +1,5 @@
+[![CI](https://github.com/ChinchillaEnterprises/openclaw-crm/actions/workflows/ci.yml/badge.svg)](https://github.com/ChinchillaEnterprises/openclaw-crm/actions/workflows/ci.yml)
+
 # openclaw-crm
 
 Lightweight CRM pipeline tracker backed by Google Sheets. Built for small agencies and solo operators who want pipeline visibility without paying for Salesforce.
@@ -101,6 +103,51 @@ go install github.com/nicholasgasior/gws@latest
 
 # Authenticate
 gws auth login
+```
+
+### Using Gspread Backend
+
+Instead of the `gws` CLI, you can use the built-in gspread backend:
+
+```bash
+pip install openclaw-crm[gspread]
+```
+
+```python
+from openclaw_crm.backends import GspreadBackend, set_backend
+
+# Using service account file
+set_backend(GspreadBackend("service-account.json"))
+
+# Or using default OAuth credentials
+set_backend(GspreadBackend())
+```
+
+### Using Airtable Backend
+
+Instead of Google Sheets, you can use Airtable:
+
+```bash
+pip install openclaw-crm[airtable]
+```
+
+```python
+from openclaw_crm.backends import AirtableBackend, set_backend
+
+# Set via environment variables
+# export AIRTABLE_BASE_ID=appXXXXXXXXXXXXXX
+# export AIRTABLE_API_TOKEN=patXXXXXXXXXXXXXX
+
+set_backend(AirtableBackend())
+```
+
+Or pass credentials directly:
+
+```python
+set_backend(AirtableBackend(
+    base_id="appXXXXXXXXXXXXXX",
+    api_token="patXXXXXXXXXXXXXX"
+))
 ```
 
 ### Custom Backend
