@@ -91,7 +91,9 @@ Create a Google Sheet with two tabs:
 
 All commands output JSON: `{"ok": true, "text": "formatted message", "data": {...}}`
 
-## Google Sheets Backend
+## Backends
+
+### Google Sheets Backend (Default)
 
 By default, openclaw-crm uses the [`gws` CLI](https://github.com/nicholasgasior/gws) for Google Sheets access. Install it and authenticate:
 
@@ -103,9 +105,55 @@ go install github.com/nicholasgasior/gws@latest
 gws auth login
 ```
 
+### Airtable Backend
+
+Alternatively, use Airtable as your backend. Install the optional dependency:
+
+```bash
+pip install openclaw-crm[airtable]
+```
+
+#### Configuration
+
+Set your Airtable credentials via environment variables or config file:
+
+**Option 1: Environment Variables**
+
+```bash
+export AIRTABLE_BASE_ID="appXXXXXXXXXXXXXX"
+export AIRTABLE_API_TOKEN="patXXXXXXXXXXXXXX"
+```
+
+**Option 2: Config File**
+
+```yaml
+airtable:
+  base_id: "appXXXXXXXXXXXXXX"
+  api_token: "patXXXXXXXXXXXXXX"
+```
+
+#### Getting Airtable Credentials
+
+1. Go to [Airtable API](https://airtable.com/create/tokens) and create a personal access token
+2. Grant access to your base (read & write permissions)
+3. Copy the base ID from the Airtable API documentation for your base
+4. Create tables matching the [Spreadsheet Setup](#spreadsheet-setup) structure
+
+#### Using Airtable Backend
+
+```python
+from openclaw_crm.backends.airtable_backend import AirtableBackend
+from openclaw_crm.sheets import set_backend
+
+backend = AirtableBackend()
+set_backend(backend)
+
+# Now all CRM operations use Airtable
+```
+
 ### Custom Backend
 
-Implement the `SheetsBackend` interface to use any Google Sheets library:
+Implement the `SheetsBackend` interface to use any data source:
 
 ```python
 from openclaw_crm.sheets import SheetsBackend, SheetResult, set_backend
