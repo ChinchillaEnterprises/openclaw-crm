@@ -103,6 +103,28 @@ go install github.com/nicholasgasior/gws@latest
 gws auth login
 ```
 
+### Gspread Backend (Official)
+
+openclaw-crm ships with an official gspread backend. To use it:
+
+1. Install the gspread optional dependency:
+```bash
+pip install openclaw-crm[gspread]
+```
+
+2. Authenticate with gspread (service account or oauth2)
+3. Set the backend:
+```python
+from openclaw_crm.backends.gspread_backend import GspreadBackend
+from openclaw_crm.sheets import set_backend
+
+# Option 1: Use service account JSON file
+set_backend(GspreadBackend(credentials_path="service_account.json"))
+
+# Option 2: Use oauth2 credentials
+set_backend(GspreadBackend(oauth_credentials_path="credentials.json"))
+```
+
 ### Custom Backend
 
 Implement the `SheetsBackend` interface to use any Google Sheets library:
@@ -110,15 +132,10 @@ Implement the `SheetsBackend` interface to use any Google Sheets library:
 ```python
 from openclaw_crm.sheets import SheetsBackend, SheetResult, set_backend
 
-class GspreadBackend(SheetsBackend):
-    def __init__(self, credentials_path):
-        import gspread
-        self.gc = gspread.service_account(filename=credentials_path)
-
+class CustomBackend(SheetsBackend):
     def read(self, spreadsheet_id, range_):
-        sh = self.gc.open_by_key(spreadsheet_id)
-        worksheet = sh.worksheet(range_.split("!")[0].strip("'"))
-        return SheetResult(success=True, data={"values": worksheet.get_all_values()})
+        # ...implement
+        pass
 
     def append(self, spreadsheet_id, range_, values):
         # ...implement
@@ -128,7 +145,7 @@ class GspreadBackend(SheetsBackend):
         # ...implement
         pass
 
-set_backend(GspreadBackend("credentials.json"))
+set_backend(CustomBackend())
 ```
 
 ## 🤖 AI Agents Welcome!
