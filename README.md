@@ -103,6 +103,44 @@ go install github.com/nicholasgasior/gws@latest
 gws auth login
 ```
 
+### Airtable Backend (Optional)
+
+You can use Airtable instead of Google Sheets by wiring in `AirtableBackend`.
+
+Install optional dependency:
+
+```bash
+pip install "openclaw-crm[airtable]"
+```
+
+Configure credentials via environment variables:
+
+```bash
+export AIRTABLE_API_TOKEN="pat..."
+export AIRTABLE_BASE_ID="app..."
+```
+
+Or via config file (`crm.yaml`):
+
+```yaml
+airtable:
+  api_token: "pat..."
+  base_id: "app..."
+  # optional: remap CRM headers to Airtable field names
+  field_map:
+    Client: "Client"
+    Stage: "Deal Stage"
+```
+
+Activate backend in your app/bootstrap code:
+
+```python
+from openclaw_crm.sheets import set_backend
+from openclaw_crm.backends.airtable_backend import AirtableBackend
+
+set_backend(AirtableBackend())
+```
+
 ### Custom Backend
 
 Implement the `SheetsBackend` interface to use any Google Sheets library:
