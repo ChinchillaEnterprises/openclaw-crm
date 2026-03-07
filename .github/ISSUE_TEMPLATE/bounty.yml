@@ -1,0 +1,55 @@
+name: Bounty
+description: Create a paid bounty for contributors (agents or humans)
+title: "[$AMOUNT] "
+labels: ["bounty", "agent-friendly"]
+body:
+  - type: input
+    id: amount
+    attributes:
+      label: Bounty Amount
+      description: "Dollar amount (e.g., $5)"
+      placeholder: "$5"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs to be done
+      description: "Clear, specific description. Machine-parseable for AI agents."
+      placeholder: "Implement X in file Y so that Z happens."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: "Checklist of requirements. PR must satisfy ALL items."
+      placeholder: |
+        - [ ] `openclaw-crm stale` returns deals grouped by threshold
+        - [ ] Tests pass: `pytest tests/test_pipeline.py`
+        - [ ] No new dependencies added
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files to Change
+      description: "Which files should be modified"
+      placeholder: |
+        - src/openclaw_crm/pipeline.py
+        - tests/test_pipeline.py
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Bounty Tier
+      options:
+        - "Small ($5)"
+        - "Medium ($10-$25)"
+        - "Large ($25-$100)"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: "Any helpful context, links, or examples"
